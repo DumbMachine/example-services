@@ -2,9 +2,6 @@ import pytest
 
 import os
 import pymongo
-from GangaCore.Utility.Config import getConfig
-from GangaCore.testlib.GangaUnitTest import GangaUnitTest
-from GangaCore.Utility.Virtualization import checkNative, checkDocker
 
 
 def test_mongo_running_host():
