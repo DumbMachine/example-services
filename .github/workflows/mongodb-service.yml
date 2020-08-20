@@ -26,17 +26,14 @@ jobs:
         image: mongo
         ports:
         - 27017:27017
-
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3
       run: yum install -y python3
     - name: Install dependencies
-      run: |
-        python3 -m pip install pymongo pytest
+      run: python3 -m pip install pymongo pytest
     - name: Please Work
-      run: |
-        python3 -m pytest temp.py
+      run: python3 -m pytest temp.py
       env:
         # use mongodb for the host here because we have specified a container for the job.
         # If we were running the job on the VM this would be localhost
