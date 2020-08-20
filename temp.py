@@ -1,9 +1,32 @@
 import pytest
 
+import os
+import pymongo
+from GangaCore.Utility.Config import getConfig
+from GangaCore.testlib.GangaUnitTest import GangaUnitTest
+from GangaCore.Utility.Virtualization import checkNative, checkDocker
 
-def test_func_fast():
-    pass
 
-@pytest.mark.slow
-def test_func_slow():
-    pass
+def test_mongo_running_host():
+    from pymongo import MongoClient
+    from pymongo.errors import ServerSelectionTimeoutError
+    PORT = os.environ["MONGODB_PORT"] if "MONGODB_PORT" in os.environ else 27017
+    HOST = os.environ["MONGODB_HOST "] if "MONGODB_HOST " in os.environ else "localhost"
+    connection_string = f"mongodb://{HOST}:{PORT}/dbName"
+    client = MongoClient(connection_string, serverSelectionTimeoutMS=10, connectTimeoutMS=20000)
+    try:
+        _ = client.server_info() # Forces a call.
+        assert True
+    except ServerSelectionTimeoutError:
+        assert False
+
+
+def test_mongo_running():
+    from pymongo import MongoClient
+    from pymongo.errors import ServerSelectionTimeoutError
+    client = MongoClient(serverSelectionTimeoutMS=10, connectTimeoutMS=20000)
+    try:
+        _ = client.server_info() # Forces a call.
+        assert True
+    except ServerSelectionTimeoutError:
+        assert False
