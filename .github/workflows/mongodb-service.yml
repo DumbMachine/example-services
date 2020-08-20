@@ -29,6 +29,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - run: mongod
     - run: npm ci
     - run: node client.js
       env:
