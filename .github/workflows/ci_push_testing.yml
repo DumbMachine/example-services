@@ -1,0 +1,51 @@
+name: Mongodb Service Example
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+defaults:
+  run:
+    working-directory: ./mongodb
+
+jobs:
+  container-job:
+    runs-on: ubuntu-latest
+
+    # runs all of the steps inside the specified container rather than on the VM host.
+    # Because of this the network configuration changes from host based network to a container network.
+    container:
+      image:  centos:7
+
+    services:
+      mongodb:
+        image: mongo
+        ports:
+        - 27017:27017
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3
+      run: yum install -y python3
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip setuptools wheel
+        python3 -m pip install --upgrade pytest pymongo
+
+    - name: Test with pytest
+      run: python3 -m pytest another.py
+      env:
+        MONGODB_HOST: mongodb
+        MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
+
+
+    - name: Test with pytest2
+      run: python3 -m pytest blank.py
+      env:
+        # MONGODB_HOST: mongodb
+        MONGODB_HOST: localhost
+        MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
