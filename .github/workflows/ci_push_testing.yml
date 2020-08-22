@@ -34,7 +34,6 @@ jobs:
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip setuptools wheel
-        python3 -m pip install -e .[dev]
     - run: |
         echo $MONGODB_HOST
         echo $MONGODB_PORT
